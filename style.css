@@ -1,0 +1,190 @@
+* {box-sizing: border-box;}
+
+/* Global Variables */
+:root {
+    --primary-col: #f2ece4;
+    --secondary-col: #8c7d77;
+    --tertiary-light: #909385;
+    --tertiary-medium: #867d8c;
+    --tertiary-medium-2: #59464D;
+    --tertiary-dark: #25261c
+}
+
+/* ###########################################################*/
+/* ###########################################################*/
+/* ###########################################################*/
+
+/* Nav Bar Start */
+.topnav {
+    overflow: hidden;
+    background-color: var(--secondary-col);
+  }
+  
+  .topnav a {
+    float: left;
+    display: block;
+    background-color: var(--tertiary-medium);
+    color: var(--primary-col);
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+  }
+  
+  .topnav a:hover {
+    background-color: var(--tertiary-light);
+    color: var(--primary-col);
+  }
+  
+  .topnav a.pagename {
+    background-color: var(--tertiary-dark);
+    color: var(--primary-col);
+  }
+  
+  .topnav a.active {
+    background-color: var(--tertiary-medium-2);
+    color: var(--primary-col);
+  }
+  
+  .topnav .search-container {
+    float: right;
+  }
+  
+  .topnav input[type=text] {
+    padding: 6px;
+    margin-top: 8px;
+    font-size: 17px;
+    border: none;
+  }
+/* Nav Bar End */
+
+/* ###########################################################*/
+/* ###########################################################*/
+/* ###########################################################*/
+
+/* General Formating */
+body {
+  background-color: var(--primary-col);
+  margin: 0;
+  font-family: sans-serif;
+}
+
+.centeredtxt {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.container {
+  position: relative;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  width: 90%;
+}
+
+.pageheadimg {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 0.6;
+    width: 100%;
+    border-radius: 25px;
+}
+
+
+div {
+  color: var(--tertiary-dark);
+}
+
+/* ###########################################################*/
+/* ###########################################################*/
+/* ###########################################################*/
+
+/* About Start */
+.About {
+    margin: auto;
+    width: 75%;
+    border: 3px solid var(--tertiary-dark);
+    padding: 15px;
+    margin-bottom: 25px
+  }
+  .aboutimg-container {
+    position: relative;
+    border-radius: 25px;
+    float: right;
+    margin: auto;
+    padding: 15px;
+    height: 400px; 
+    width: auto; 
+    object-fit: contain
+  }
+  .abouttext {
+      text-align: justify;
+      font-size: 115%;
+  }
+/* About End */
+
+/* ###########################################################*/
+/* ###########################################################*/
+/* ###########################################################*/
+
+/* The side navigation menu */
+.sidebar {
+    margin: 0;
+    padding: 0;
+    width: 200px;
+    background-color: var(--secondary-col);
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+  }
+  
+  /* Sidebar links */
+  .sidebar a {
+    display: block;
+    color: var(--primary-col);
+    padding: 16px;
+    text-decoration: none;
+  }
+  
+  /* Active/current link */
+  .sidebar a.active {
+    background-color: var(--tertiary-medium-2);
+    color: var(--primary-col);
+  }
+  
+  /* Links on mouse-over */
+  .sidebar a:hover:not(.active) {
+    background-color: var(--tertiary-medium);
+    color: var(--primary-col);
+  }
+  
+  /* Page content. The value of the margin-left property should match the value of the sidebar's width property */
+  div.content {
+    margin-left: 200px;
+    padding: 1px 16px;
+    height: 1000px;
+  }
+  
+  /* On screens that are less than 700px wide, make the sidebar into a topbar */
+  @media screen and (max-width: 700px) {
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: relative;
+    }
+    .sidebar a {float: left;}
+    div.content {margin-left: 0;}
+  }
+  
+  /* On screens that are less than 400px, display the bar vertically, instead of horizontally */
+  @media screen and (max-width: 400px) {
+    .sidebar a {
+      text-align: center;
+      float: none;
+    }
+  }
