@@ -2,12 +2,23 @@
 
 /* Global Variables */
 :root {
-    --primary-col: #f2ece4;
-    --secondary-col: #8c7d77;
-    --tertiary-light: #909385;
-    --tertiary-medium: #867d8c;
-    --tertiary-medium-2: #59464D;
-    --tertiary-dark: #25261c
+    --background: #f2ece4;
+    --primary: #8c7d77;
+    --highlight: #473B4A;
+    --secondary-1: #867d8c;
+    --secondary-2: #59464D;
+    --dark-contrast: #25261c;
+    --light-contrast: #f2ece4;
+    
+    /* FUN COLOR SCHEME
+    --background: #d9d9d9;
+    --primary: #d1c4e9;
+    --highlight: #607d8b;
+    --secondary-1: #b89bcc;
+    --secondary-2: #536878;
+    --dark-contrast: #272727;
+    --light-contrast: #f2ece4;
+    */
 }
 
 /* ###########################################################*/
@@ -17,14 +28,14 @@
 /* Nav Bar Start */
 .topnav {
     overflow: hidden;
-    background-color: var(--secondary-col);
+    background-color: var(--primary);
   }
   
   .topnav a {
     float: left;
     display: block;
-    background-color: var(--tertiary-medium);
-    color: var(--primary-col);
+    background-color: var(--secondary-1);
+    color: var(--light-contrast);
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
@@ -32,18 +43,18 @@
   }
   
   .topnav a:hover {
-    background-color: var(--tertiary-light);
-    color: var(--primary-col);
+    background-color: var(--highlight);
+    color: var(--light-contrast);
   }
   
   .topnav a.pagename {
-    background-color: var(--tertiary-dark);
-    color: var(--primary-col);
+    background-color: var(--dark-contrast);
+    color: var(--light-contrast);
   }
   
   .topnav a.active {
-    background-color: var(--tertiary-medium-2);
-    color: var(--primary-col);
+    background-color: var(--secondary-2);
+    color: var(--light-contrast);
   }
   
   .topnav .search-container {
@@ -64,7 +75,7 @@
 
 /* General Formating */
 body {
-  background-color: var(--primary-col);
+  background-color: var(--background);
   margin: 0;
   font-family: sans-serif;
 }
@@ -97,7 +108,7 @@ body {
 
 
 div {
-  color: var(--tertiary-dark);
+  color: var(--dark-contrast);
 }
 
 /* ###########################################################*/
@@ -108,7 +119,7 @@ div {
 .About {
     margin: auto;
     width: 75%;
-    border: 3px solid var(--tertiary-dark);
+    border: 3px solid var(--dark-contrast);
     padding: 15px;
     margin-bottom: 25px
   }
@@ -137,7 +148,7 @@ div {
     margin: 0;
     padding: 0;
     width: 200px;
-    background-color: var(--secondary-col);
+    background-color: var(--primary);
     position: fixed;
     height: 100%;
     overflow: auto;
@@ -146,21 +157,21 @@ div {
   /* Sidebar links */
   .sidebar a {
     display: block;
-    color: var(--primary-col);
+    color: var(--light-contrast);
     padding: 16px;
     text-decoration: none;
   }
   
   /* Active/current link */
   .sidebar a.active {
-    background-color: var(--tertiary-medium-2);
-    color: var(--primary-col);
+    background-color: var(--secondary-2);
+    color: var(--light-contrast);
   }
   
   /* Links on mouse-over */
   .sidebar a:hover:not(.active) {
-    background-color: var(--tertiary-medium);
-    color: var(--primary-col);
+    background-color: var(--secondary-1);
+    color: var(--light-contrast);
   }
   
   /* Page content. The value of the margin-left property should match the value of the sidebar's width property */
