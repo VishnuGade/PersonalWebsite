@@ -1,5 +1,9 @@
 * {box-sizing: border-box;}
 
+/* https://cierareu.northwestern.edu/2021CIERA_REU_websites/IliaQato/index.html#aboutme */
+/* https://www.free-css.com/free-css-templates */
+
+
 /* Global Variables */
 :root {
     --background: #f2ece4;
@@ -10,15 +14,15 @@
     --dark-contrast: #25261c;
     --light-contrast: #f2ece4;
     
-    /* FUN COLOR SCHEME
-    --background: #d9d9d9;
+    /* FUN COLOR SCHEME */
+    /* --background: #d9d9d9;
     --primary: #d1c4e9;
     --highlight: #607d8b;
     --secondary-1: #b89bcc;
     --secondary-2: #536878;
     --dark-contrast: #272727;
-    --light-contrast: #f2ece4;
-    */
+    --light-contrast: #f2ece4; */
+   
 }
 
 /* ###########################################################*/
@@ -29,6 +33,10 @@
 .topnav {
     overflow: hidden;
     background-color: var(--primary);
+    position: fixed;
+    top:0;
+    z-index: 100;
+    width: 100%;
   }
   
   .topnav a {
@@ -57,16 +65,6 @@
     color: var(--light-contrast);
   }
   
-  .topnav .search-container {
-    float: right;
-  }
-  
-  .topnav input[type=text] {
-    padding: 6px;
-    margin-top: 8px;
-    font-size: 17px;
-    border: none;
-  }
 /* Nav Bar End */
 
 /* ###########################################################*/
@@ -101,14 +99,33 @@ body {
     position: relative;
     margin-left: auto;
     margin-right: auto;
-    opacity: 0.6;
     width: 100%;
+    /* max-height: 500px; */
     border-radius: 25px;
 }
 
-
 div {
   color: var(--dark-contrast);
+}
+
+
+/* Parallax Images */
+.bgimg-1 {
+    background-attachment: scroll;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: White;
+    min-height: 400px;
+}
+
+/* ###########################################################*/
+/* ###########################################################*/
+/* ###########################################################*/
+
+/* CIERA Research Start */
+.sectionheader {
+  text-align: center;
 }
 
 /* ###########################################################*/
@@ -117,26 +134,32 @@ div {
 
 /* About Start */
 .About {
+    position: relative;
     margin: auto;
+    min-height: 430px;
     width: 75%;
     border: 3px solid var(--dark-contrast);
+    border-radius: 15px;
     padding: 15px;
     margin-bottom: 25px
   }
   .aboutimg-container {
-    position: relative;
+    display: block;
+    height: 100%; 
+    max-height: 400px;
+    width: auto;
     border-radius: 25px;
     float: right;
-    margin: auto;
     padding: 15px;
-    height: 400px; 
-    width: auto; 
-    object-fit: contain
+    overflow: hidden;
+    /* object-fit: contain;s */
   }
   .abouttext {
-      text-align: justify;
-      font-size: 115%;
+    text-align: justify;
+    text-indent: 50px;
+    font-size: 125%;
   }
+
 /* About End */
 
 /* ###########################################################*/
@@ -157,7 +180,7 @@ div {
   /* Sidebar links */
   .sidebar a {
     display: block;
-    color: var(--light-contrast);
+    color: var(--dark-contrast);
     padding: 16px;
     text-decoration: none;
   }
@@ -178,18 +201,45 @@ div {
   div.content {
     margin-left: 200px;
     padding: 1px 16px;
-    height: 1000px;
   }
-  
+
+  .PSection {
+    margin: auto;
+    width: 100%;
+    border: 3px solid var(--dark-contrast);
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+    scroll-margin-top: 63px;
+  }
+  .psecimg-container {
+    display: inline-block;
+    max-height:120px;
+    width: fit-content;;
+    /* position: relative; */
+    border-radius: 25px;
+    padding: 5px;/*width: 100%*/
+    /* object-fit: contain */
+  }
+  .psectext {
+      text-align: justify;
+      text-indent: 50px;
+      font-size: 115%;
+  }
+
   /* On screens that are less than 700px wide, make the sidebar into a topbar */
   @media screen and (max-width: 700px) {
     .sidebar {
       width: 100%;
       height: auto;
-      position: relative;
+      position: fixed;
+      top:0px;
     }
     .sidebar a {float: left;}
-    div.content {margin-left: 0;}
+    div.content {
+      margin-left: 0;
+      scroll-margin-top: 80px
+    }
   }
   
   /* On screens that are less than 400px, display the bar vertically, instead of horizontally */
@@ -197,5 +247,9 @@ div {
     .sidebar a {
       text-align: center;
       float: none;
+    }
+    div.content {
+      margin-left: 0;
+      scroll-margin-top: 60px
     }
   }

@@ -5,6 +5,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Vishnu Gade's Personal Website</title>
     <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <script src="scripts.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=default'></script>
 </head>
 <body>
     <div class="topnav" id="myTopnav">
@@ -15,16 +18,201 @@
 
     <!-- The sidebar -->
     <div class="sidebar">
-        <a class="active" href="#home">Abstract</a>
-        <a href="#news">Introduction</a>
-        <a href="#contact">Methods</a>
-        <a href="#about">Results & Conclusions</a>
-        <a href="#about">Future Work</a>
+        <a class="active" href="#abstract">Abstract</a>
+        <a href="#introduction">Introduction</a>
+        <a href="#methods">Methods</a>
+        <a href="#resandconc">Results & Conclusions</a>
+        <a href="#references">References</a>
+        <a href="#acknowledgements">Acknowledgements</a>
     </div>
     
     <!-- Page content -->
-    <div class="content">
-        ..
+    <div style="margin-left: 200px; margin-top: 48px;">
+        <div class="bgimg-1 w3-display-container" style="background-image: url('images/binarystars.jpg');" id="CIERAbackground">
+            <div class="w3-display-middle" style="white-space:nowrap;">
+                <span class="w3-center w3-padding-large w3-display-middle w3-black w3-xlarge w3-wide" > Simulating Large Populations of Rare Binaries With POSYDON
+            </div>
+            <div class="w3-display-bottomleft w3-center w3-padding-large">
+                <span class="w3-text-white">2023 CIERA REU at Northwestern University</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="content" style="margin-top: 12px;">
+                
+        <section class= "PSection" id="abstract">
+            <h1 style= "text-align: center;">Abstract</h1>
+            <p class= "psectext">
+                A prominent roadblock in the study of binary stellar systems is efficiently generating large populations of rare binaries such as double compact object (DCO) mergers or low-mass X-ray binaries (LMXBs). 
+                We significantly improve the efficiency of this process in the POSYDON<sup>1</sup> population synthesis code by implementing the STROOPWAFEL importance sampling algorithm by <i>Broekgaarden et al. 2019</i><sup>2</sup>.
+                We use this algorithm to generate samples of various rare binary systems more efficiently to enable more detailed study of these systems. 
+                We find a 12x and 30x improvement in sampling for 100 thousand binaries for both LMXBs and DCO Mergers respectively. 
+                We also plan to implement more customizable user-defined numerical filters and see the potential for research into the progenitors of observed systems.
+            </p> 
+        </section>
+
+        <section class= "PSection" id="introduction">
+            <h1 style= "text-align: center;">Introduction</h1>
+            <p class= "psectext">
+                Population synthesis models are crucial to our study of binary star systems, allowing us to study the evolution of these systems on timescales that we cannot observe ourselves. 
+                In doing so they provide vital information about the evolution of what we now know to be the configuration of most massive stars in the universe. 
+                POSYDON is a next-generation population synthesis code designed for this purpose addressing some of the main drawbacks of population synthesis through machine learning (Fragos et al. 2023)<sup>1</sup>. 
+                This allows POSYDON to accurately model crucial dynamics between the stellar bodies in binary systems including realistic mass-transfer calculations and assessment of stability, internal angular-momentum transport and tides, stellar core sizes, mass-transfer rates, and orbital periods. 
+                For a more detailed discussion of POSYDON see <i>Fragos et al. 2023</i><sup>1</sup>.
+            </p>
+            <p class= "psectext">
+                Within the context of binary star systems, most population synthesis models will sample initial conditions for the binaries they evolve using distributions from known models of star masses and orbital parameters (i.e. orbital period and orbital separation). 
+                While the results of these simulations are useful in determining the proportion of different types of binaries in the universe, they are very limiting if we want to study specific classes of binaries. 
+                For instance, we may be interested in studying accretion dynamics through models of a compact object and a companion star most commonly found in X-ray binaries (XRBs). 
+                Or we may want to study the dynamics of merger events between double compact object systems (DCOs) to understand gravitational wave data from detectors like LIGO. 
+                For the study of specific systems, standard random sampling from these prior distributions is inefficient and wastes time generating unnecessary data.
+            </p>
+            <p class= "psectext">
+                To combat this we use alternative sampling methods to more efficiently generate rarer target populations. 
+                STROOPWAFEL is an “Adaptive Importance Sampling” (AIS) algorithm created for this purpose (Broekgaarden et al. 2019)<sup>2</sup>. 
+                It was designed specifically for improved simulation of DCO mergers as gravitational wave sources, but we expand it to sample for other rare binaries as well.
+            </p>
+            <p class= "psectext">
+                The STROOPWAFEL algorithm is split into 3 main phases: exploration, adaptation, and refinement. 
+                During the Exploration phase, the algorithm randomly samples according to the known (prior) distributions of our initial conditions, identifies binary systems of interest (our target population), and gathers their particular initial conditions. 
+                Then in the adaptation phase, it generates a new sampling distribution, called the \textit{instrumental distribution}, focused around the initial conditions (a mixture of Gaussians) of our target binaries. 
+                Finally, in the refinement phase, it draws from this new sampling distribution hoping to generate a larger proportion of target binary systems.
+            </p>
+        </section>
+
+        <div class= "PSection" id="methods">
+            <h1 style= "text-align: center;">Methods</h1>
+            <h2>Significant Details of the STROOPWAFEL Algorithm</h2>
+            <p class= "psectext">
+                The duration of the Exploration phase is important in optimizing the STROOPWAFEL algorithm. 
+                If too much time is spent in this phase, we don't fully take advantage of the improved sampling but if too little time is spent we may miss important target regions and skew our final samples. 
+                The duration, here on denoted <i>f<sub>expl</sub></i>, is directly calculated based on the rareness of the target population and is quantified as a fraction of the total samples <i>N</i> we would like to generate. 
+                <i>f<sub>expl</sub></i> is modified each time as small increments of samples are drawn from the prior distributions based on the number of targets generated. 
+                The important thing is to account for the effect of any regions of parameter space that may contain missed targets. 
+                To do so parameter space is considered in two parts described by <i>z<sub>1</sub></i> and <i>z<sub>2</sub></i>. 
+                <i>z<sub>1</sub></i> is the contribution to the total rate of formation of targets (<i>R<sub>T</sub></i>) from the space sampled so far while <i>z<sub>2</sub></i> is the contribution from targets that have not yet been discovered. 
+                <i>f<sub>expl</sub></i> is then optimized by minimizing the theoretical effect of <i>z<sub>2</sub></i> on the rate of formation of targets in the prior distribution. 
+                This is done by minimizing the variance in <i>R<sub>T</sub></i> due to <i>z<sub>2</sub></i> such that it is less than the uncertainty in <i>R<sub>T</sub></i> from <i>z<sub>1</sub></i>.
+                This gives us an <i>f<sub>expl</sub></i> of 
+            </p>
+
+                \[f_{expl}=1-\frac{z_1(\sqrt{1-z_1}-\sqrt{z_2})}{\sqrt{1-z_1}(\sqrt{z_2(1-z_1)}+z_1)}\]
+                
+            <p class= "psectext">
+                For a full derivation refer to <i>Broekgaarden et al. 2019</i><sup>2</sup>. 
+                Assuming <i>z<sub>1</sub></i> and <i>z<sub>2</sub></i> are much smaller than 1, i.e. the target population is very rare, the above equation can be approximated to 
+            </p>
+                
+                \[f_{expl}\approx1-\frac{z_1}{z_1+\sqrt{z_2}}\]
+                
+            <p class= "psectext">
+                This gives us the expected behavior that when <i>z<sub>1</sub></i> is 0, <i>f<sub>expl</sub></i> is 1, meaning all our time is spent in the exploration phase, but as <i>z<sub>1</sub></i> increases, <i>f<sub>expl</sub></i> decreases. 
+                During the algorithm <i>z<sub>1</sub></i> and <i>z<sub>2</sub></i> are defined as follows
+            </p>
+                
+                \[z_1=\frac{\#targetsfound}{\#samplestaken}\] \[z_2=\frac{1}{f_{expl}N}\]
+                
+            <p class= "psectext"><i>z<sub>2</sub></i> is defined here to be equivalent to the effect of the sampling noise of sampling <i>f<sub>expl</sub>N</i> samples satisfying our conditions for optimizing <i>f<sub>expl</sub></i>.</p>
+                
+            <p class= "psectext">
+                In the Adaptation Phase, Gaussian distributions are created around the initial parameters of the found targets. 
+                The instrumental distribution is chosen to be a mixture of Gaussians such that equal samples are taken from each Gaussian. 
+                This decision makes it computationally inexpensive to generate samples and calculate their weights. 
+                It is important to be able to calculate the weights (which quantify the significance/likelihood) of each generated sample as they allow us to re-normalize the skewed data we generate back to our original distributions ensuring that later data analysis is not skewed by our artificially instrumental distribution. 
+                The fact that they are chosen to be computationally inexpensive to calculate, also enables the use of the weights of each target found in the exploration phase to adjust how many samples we draw from that target's Gaussian if we choose to do so at a later date.
+            </p>
+            
+            <h2>Our Implementation</h2>
+            <p class= "psectext">
+                The prior distributions used by POSYDON are as follows: Kroupa2001 for primary star mass (Kroupa 2001)<sup>3</sup>, flat-mass ratio for secondary star mass, and Sana+12_period_extended for orbital period (Sana et al. 2012)<sup>4</sup>.
+            </p>
+            
+            <p class= "psectext">
+                The filters we have designed and included are X-ray Binaries (XRBs), Low-Mass X-ray Binaries (LMXBs), and Double Compact Object (DCO) Mergers.
+                We define XRBs as systems that evolve to have only 1 compact object (that is not a white dwarf) and is either detached or in Roche-Lobe overflow. 
+                LMXBs are defined the same as XRBs except we also require that the donor star be less than 1.5M<sub>&odot</sub>. 
+                We define DCO Mergers as a systems which evolve to contain 2 compact objects (neither of which are white dwarfs) and which come in contact with each other near the end of their evolution.
+            </p>
+        </div>
+
+        <div class= "PSection" id="resandconc">
+            <h1 style="text-align: center;">Discussion</h1>
+
+            <p class="psectext">For our testing, we ran the algorithm for 100 thousand binaries filtering for LMXBs and DCO mergers.</p>
+
+            <h2>Low-Mass X-ray Binaries:</h2>
+
+            <p class="psectext">
+                During the exploration phase, the formation rate of LMXBs was 0.027902 for 20500 binaries (572 hits). 
+                During the refinement phase, the target formation rate rose by a factor of 15 to 0.4282 for 79500 (34039 hits). 
+                This results in a cumulative LMXB formation rate of 0.34611 for 100000 binaries (34611 hits): a 12x improvement.
+            </p>
+
+            <h2>
+                Double Compact Object Mergers:
+            </h2>
+
+            <figure>
+                <object data="images/poster_pic.svg" width="100%" height="auto"> </object>
+                <figcaption>Figure 1. The plot on the left highlights the few DCO Mergers found from default sampling of 100000 binaries in our initial conditions parameter space. While, the plot on the right highlights the DCO Mergers found with our implementation of STROOPWAFEL sampling for 100000 binaries.</figcaption>
+            </figure>
+
+            <p class="psectext">
+                During the exploration phase, the formation rate of DCO Mergers was 0.001163 for 76500 binaries (89 hits). 
+                During the refinement phase, the target formation rate rose by a factor of 120 to 0.1440 for 23500 (3383 hits). 
+                This results in a cumulative DCO Merger formation rate of 0.03472 for 100000 binaries (3472 hits): a 30x improvement!
+            </p>
+
+            <h2>Conlusions and Futher Work</h2>
+            <p class="psectext">
+                By implementing the STROOPWAFEL importance sampling algorithm into the POSYDON binary population synthesis code, we have significantly improved the sampling of rare binaries. 
+                This leads to substantial computational time savings and allows for more detailed inclusion of massive-star physics and exploring model assumptions compared to traditional methods. 
+                It also results in a higher-resolution parameter space mapping, reducing sampling uncertainty by up to a factor of 5. 
+                Although this effect is largest for DCO mergers, it remains applicable and can easily be extended to other systems like LMXBs, gamma-ray bursts (GRBs), and Be X-ray binaries. 
+                We plan to use this exact functionality to aid our study of supernova kicks using LMXBs in the coming months.
+            </p>
+
+            <p class="psectext">
+                We also see the potential to study more specific systems with the future addition of supplementary numerical limits to our filters. 
+                This will allow us to constrain to specific systems such as DCO Mergers within certain mass ranges or even constrain to observed data for a specific system to probe its possible progenitors and further evolution! 
+                We also plan to add a customizable purely numerical filter for use in a wider range of studies.
+                Beyond this, we are considering accounting for the weights of the targets before samples are drawn from the instrumental distribution so that the drawn population is more representative of the prior distributions.
+                Lastly, we of course hope to expand the qualitative filters further to the other systems mentioned above and continue to seek other ways to further improve sampling efficiency.
+            </p>
+        </div>
+        
+        <div class= "PSection" id="references">
+            <h1 style=" text-align: center;">References</h1>
+            <a href="https://ui.adsabs.harvard.edu/abs/2019MNRAS.490.5228B/abstract" target="_blank" rel="noopener noreferrer">
+                Broekgaarden, F. S., Justham, S., de Mink, S. E., et al. 2019, MNRAS, 490, 5228
+            </a>
+            <br>
+            <a href="https://ui.adsabs.harvard.edu/abs/2023ApJS..264...45F/abstract" target="_blank" rel="noopener noreferrer">
+                Fragos, T., Andrews, J. J., Bavera, S. S., et al. 2023, ApJS, 264, 45
+            </a>
+            <br>  
+            <a href="https://ui.adsabs.harvard.edu/abs/2001MNRAS.322..231K/abstract" target="_blank" rel="noopener noreferrer">
+                Kroupa, P. 2001, MNRAS, 322, 231
+            </a>
+            <br>  
+            <a href="https://ui.adsabs.harvard.edu/abs/2012Sci...337..444S/abstract" target="_blank" rel="noopener noreferrer">
+                Sana, H., de Mink, S. E., de Koter, A. et al. 2012, Science, 337, 444
+            </a>            
+        </div>
+
+        <div class= "PSection" id="acknowledgements">
+            <h1 style=" text-align: center;">Acknowledgements</h1>
+            <p class="psectext">
+                I would like to thank <a href="https://ciera.northwestern.edu/directory/vishal-baibhav/" target="_blank" rel="noopener noreferrer">Dr. Vishal Baibhav</a> and <a href="https://sites.northwestern.edu/vickykalogera/" target="_blank" rel="noopener noreferrer">Dr. Vicky Kalogera</a> for their support throughout this project <a href="https://faculty.wcas.northwestern.edu/aaron-geller/index.html" target="_blank" rel="noopener noreferrer">Dr. Aaron Geller</a> and Dr. Emily Leiner for organizing the REU at CIERA, opening the doors for this work. 
+                This material is based upon work supported by the National Science Foundation under grant No. AST 2149425, a Research Experience for Undergraduates (REU) grant awarded to CIERA at Northwestern University. 
+                Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation. 
+                This research was supported in part through the computational resources and staff contributions provided for the Quest high-performance computing facility at Northwestern University which is jointly supported by the Office of the Provost, the Office for Research, and Northwestern University Information Technology.
+            </p>
+            <div style="text-align:center;"> 
+                <img class="psecimg-container" src="images/NorthwesternCIERANSFLogo.png">
+                <img class="psecimg-container" src="images/posydonlogo.png"> 
+            </div>
+        </div>
     </div>
 </body>
 </html>
